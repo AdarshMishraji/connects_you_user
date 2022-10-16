@@ -1,10 +1,11 @@
-import { bulkAesDecrypt, mongoose } from '@adarsh-mishra/node-utils';
+import { bulkAesDecrypt } from '@adarsh-mishra/node-utils/commonHelpers';
+import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
 
 import { UserLoginHistoryModel, UserModel } from '../../../models';
 import { AuthTypeEnum } from '../types';
 
 export type TLoginParams = {
-	loginMetaData: string;
+	loginMetaData?: string;
 	existedUserId: mongoose.Types.ObjectId;
 	fcmToken: string;
 	session: mongoose.ClientSession | null | undefined;

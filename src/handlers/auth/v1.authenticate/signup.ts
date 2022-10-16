@@ -1,4 +1,5 @@
-import { bulkAesEncrypt, mongoose } from '@adarsh-mishra/node-utils';
+import { bulkAesEncrypt } from '@adarsh-mishra/node-utils/commonHelpers';
+import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { TokenPayload } from 'google-auth-library';
 
 import { UserLoginHistoryModel, UserModel } from '../../../models';
@@ -11,7 +12,7 @@ export type TSignupParams = {
 	userEmailHash: string;
 	fcmToken: string;
 	session: mongoose.ClientSession | null | undefined;
-	loginMetaData: string;
+	loginMetaData?: string;
 };
 
 export const signup = async ({

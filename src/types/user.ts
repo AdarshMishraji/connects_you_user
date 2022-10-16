@@ -4,7 +4,7 @@ export interface IUser {
 	email: string;
 	emailHash: string;
 	name: string;
-	photoUrl: string;
+	photoUrl?: string;
 	description?: string;
 	publicKey: string;
 	fcmToken: string;

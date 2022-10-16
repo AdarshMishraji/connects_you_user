@@ -1,4 +1,4 @@
-import { jwt } from '@adarsh-mishra/node-utils';
+import { jwt } from '@adarsh-mishra/node-utils/commonHelpers';
 import { OAuth2Client, TokenPayload } from 'google-auth-library';
 
 export const validateOAuth2Token = async (token: string) => {

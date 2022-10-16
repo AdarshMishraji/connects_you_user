@@ -1,4 +1,4 @@
-import { mongoose } from '@adarsh-mishra/node-utils';
+import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
 
 export interface IUserRefreshToken {
 	loginId: mongoose.Types.ObjectId;

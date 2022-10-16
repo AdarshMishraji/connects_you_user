@@ -10,7 +10,12 @@
 		"sourceType": "module",
 		"tsconfigRootDir": "./"
 	},
-	"plugins": ["@typescript-eslint", "prettier", "sonarjs", "import"],
+	"plugins": [
+		"@typescript-eslint",
+		"prettier",
+		"sonarjs",
+		"import"
+	],
 	"extends": [
 		"eslint:recommended",
 		"plugin:@typescript-eslint/eslint-recommended",
@@ -21,7 +26,10 @@
 		"plugin:sonarjs/recommended"
 	],
 	"rules": {
-		"brace-style": ["error", "1tbs"],
+		"brace-style": [
+			"error",
+			"1tbs"
+		],
 		"no-tabs": 0,
 		"semi": "error",
 		"global-require": 0,
@@ -62,18 +70,35 @@
 			"error",
 			{
 				"selector": "default",
-				"format": ["camelCase", "UPPER_CASE"],
+				"format": [
+					"camelCase",
+					"UPPER_CASE",
+					"PascalCase"
+				],
 				"leadingUnderscore": "allow",
 				"trailingUnderscore": "allow"
 			},
 			{
-				"selector": ["typeLike"],
-				"format": ["PascalCase"]
+				"selector": [
+					"typeLike"
+				],
+				"format": [
+					"PascalCase"
+				]
 			},
 			{
-				"selector": ["variable"],
-				"modifiers": ["const", "exported"],
-				"format": ["camelCase", "UPPER_CASE", "PascalCase"]
+				"selector": [
+					"variable"
+				],
+				"modifiers": [
+					"const",
+					"exported"
+				],
+				"format": [
+					"camelCase",
+					"UPPER_CASE",
+					"PascalCase"
+				]
 			},
 			{
 				"selector": [
@@ -87,30 +112,54 @@
 					"enumMember"
 				],
 				"format": null,
-				"modifiers": ["requiresQuotes"]
+				"modifiers": [
+					"requiresQuotes"
+				]
 			},
 			{
-				"selector": ["typeAlias"],
-				"prefix": ["T"],
-				"format": ["PascalCase"]
+				"selector": [
+					"typeAlias"
+				],
+				"prefix": [
+					"T"
+				],
+				"format": [
+					"PascalCase"
+				]
 			},
 			{
-				"selector": ["interface"],
-				"prefix": ["I"],
-				"format": ["PascalCase"]
+				"selector": [
+					"interface"
+				],
+				"prefix": [
+					"I"
+				],
+				"format": [
+					"PascalCase"
+				]
 			},
 			{
-				"selector": ["enum"],
-				"suffix": ["Enum"],
-				"format": ["PascalCase"]
+				"selector": [
+					"enum"
+				],
+				"suffix": [
+					"Enum"
+				],
+				"format": [
+					"PascalCase"
+				]
 			},
 			{
-				"selector": ["enumMember"],
+				"selector": [
+					"enumMember"
+				],
 				"format": null
 			},
 			{
 				"selector": "variable",
-				"modifiers": ["destructured"],
+				"modifiers": [
+					"destructured"
+				],
 				"format": null
 			}
 		],
@@ -142,13 +191,18 @@
 						"position": "after"
 					}
 				],
-				"pathGroupsExcludedImportTypes": ["builtin"]
+				"pathGroupsExcludedImportTypes": [
+					"builtin"
+				]
 			}
 		],
 		"import/first": 1,
 		// "import/exports-last": ["error"],
 		"@typescript-eslint/no-namespace": "off",
-		"import/extensions": ["error", "never"],
+		"import/extensions": [
+			"error",
+			"never"
+		],
 		"import/no-useless-path-segments": [
 			"error",
 			{
@@ -156,42 +210,104 @@
 			}
 		],
 		"import/no-deprecated": 1,
-		"import/no-commonjs": ["error"],
-		"import/no-default-export": ["error"],
+		"import/no-commonjs": [
+			"error"
+		],
+		"import/no-default-export": [
+			"error"
+		],
 		"import/no-unassigned-import": [
 			"error",
-			{ "allow": ["dotenv-safe/config", "newrelic"] }
+			{
+				"allow": [
+					"dotenv-safe/config",
+					"newrelic"
+				]
+			}
 		],
-		"import/no-duplicates": ["error"],
-		"import/no-cycle": ["error"],
-		"sonarjs/cognitive-complexity": ["error"],
-		"sonarjs/no-identical-expressions": ["error"],
-		"eqeqeq": ["error", "always"],
-		"max-params": ["error", 4],
-		"no-console": ["error"],
-		"no-lonely-if": ["error"],
-		"no-useless-return": ["error"],
-		"spaced-comment": ["error", "always"],
-		"yoda": ["error", "never"],
+		"import/no-duplicates": [
+			"error"
+		],
+		"import/no-cycle": [
+			"error"
+		],
+		"sonarjs/cognitive-complexity": [
+			"error"
+		],
+		"sonarjs/no-identical-expressions": [
+			"error"
+		],
+		"eqeqeq": [
+			"error",
+			"always"
+		],
+		"max-params": [
+			"error",
+			4
+		],
+		"no-console": [
+			"error"
+		],
+		"no-lonely-if": [
+			"error"
+		],
+		"no-useless-return": [
+			"error"
+		],
+		"spaced-comment": [
+			"error",
+			"always"
+		],
+		"yoda": [
+			"error",
+			"never"
+		],
 		"@typescript-eslint/array-type": [
 			"error",
-			{ "default": "generic", "readonly": "generic" }
+			{
+				"default": "generic",
+				"readonly": "generic"
+			}
 		],
-		"@typescript-eslint/consistent-generic-constructors": ["error"],
-		"@typescript-eslint/consistent-indexed-object-style": ["error"],
-		"@typescript-eslint/ban-types": ["error"],
-		"@typescript-eslint/method-signature-style": ["error"],
-		"@typescript-eslint/no-confusing-non-null-assertion": ["warn"],
-		"@typescript-eslint/no-duplicate-enum-values": ["error"],
-		"@typescript-eslint/no-explicit-any": ["error"],
+		"@typescript-eslint/consistent-generic-constructors": [
+			"error"
+		],
+		"@typescript-eslint/consistent-indexed-object-style": [
+			"error"
+		],
+		"@typescript-eslint/ban-types": [
+			"error"
+		],
+		"@typescript-eslint/method-signature-style": [
+			"error"
+		],
+		"@typescript-eslint/no-confusing-non-null-assertion": [
+			"warn"
+		],
+		"@typescript-eslint/no-duplicate-enum-values": [
+			"error"
+		],
+		"@typescript-eslint/no-explicit-any": [
+			"error"
+		],
 		"@typescript-eslint/no-floating-promises": [
 			"error",
-			{ "ignoreIIFE": true }
+			{
+				"ignoreIIFE": true
+			}
 		],
-		"@typescript-eslint/no-for-in-array": ["error"],
-		"@typescript-eslint/no-non-null-asserted-optional-chain": ["error"],
-		"@typescript-eslint/no-unnecessary-condition": ["error"],
-		"@typescript-eslint/non-nullable-type-assertion-style": ["warn"],
+		"@typescript-eslint/no-for-in-array": [
+			"error"
+		],
+		"@typescript-eslint/no-non-null-asserted-optional-chain": [
+			"error"
+		],
+		"@typescript-eslint/no-unnecessary-condition": [
+			"error"
+		],
+		"@typescript-eslint/non-nullable-type-assertion-style": [
+			"warn"
+		],
 		"@typescript-eslint/no-non-null-assertion": "off"
 	}
 }

@@ -1,4 +1,4 @@
-import { mongoose } from '@adarsh-mishra/node-utils';
+import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
 
 import { users } from '../schemas';
 import { IUser } from '../types';
