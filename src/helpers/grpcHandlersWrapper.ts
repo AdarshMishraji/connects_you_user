@@ -7,6 +7,5 @@ export const handlerWrapper =
 	) =>
 	(req: ServerUnaryCall<T, V>, callback: sendUnaryData<V>) => {
 		// eslint-disable-next-line no-console
-		console.log(req.getPath());
 		handler(req, callback, wrappers);
 	};

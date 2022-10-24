@@ -12,7 +12,6 @@ import { v1GetAllUsers } from '../handlers/user/v1.getAllUsers';
 import { v1GetUserDetails } from '../handlers/user/v1.getUserDetails';
 import { v1GetUserLoginHistory } from '../handlers/user/v1.getUserLoginHistory';
 import { v1GetUserLoginInfo } from '../handlers/user/v1.getUserLoginInfo';
-import { v1SetUserOnlineStatus } from '../handlers/user/v1.setUserOnlineStatus';
 import { handlerWrapper } from '../helpers/grpcHandlersWrapper';
 
 const port = `0.0.0.0:${process.env.PORT || 1000}`;
@@ -32,11 +31,10 @@ export const createGRPCServer = ({ redisClient }: { redisClient: Redis }) => {
 		updateFcmToken: handlerWrapper(v1UpdateFcmToken, { redisClient }),
 	});
 	server.addService(ServiceProviders.user.UserServices.service, {
+		getUserLoginInfo: handlerWrapper(v1GetUserLoginInfo, { redisClient }),
 		getUserDetails: handlerWrapper(v1GetUserDetails, { redisClient }),
 		getAllUsers: handlerWrapper(v1GetAllUsers, { redisClient }),
-		getUserLoginInfo: handlerWrapper(v1GetUserLoginInfo, { redisClient }),
 		getUserLoginHistory: handlerWrapper(v1GetUserLoginHistory, { redisClient }),
-		setUserOnlineStatus: handlerWrapper(v1SetUserOnlineStatus, { redisClient }),
 	});
 
 	server.bindAsync(port.toString(), ServerCredentials.createInsecure(), (error, port) => {

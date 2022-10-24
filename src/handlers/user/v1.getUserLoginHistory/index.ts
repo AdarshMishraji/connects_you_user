@@ -1,6 +1,10 @@
 import { UserLoginHistoryRequest } from '@adarsh-mishra/connects_you_services/services/user/UserLoginHistoryRequest';
 import { UserLoginHistoryResponse } from '@adarsh-mishra/connects_you_services/services/user/UserLoginHistoryResponse';
-import { isEmptyEntity, promisifiedAesEncryptData } from '@adarsh-mishra/node-utils/commonHelpers';
+import {
+	isEmptyEntity,
+	promisifiedAesDecryptData,
+	promisifiedAesEncryptData,
+} from '@adarsh-mishra/node-utils/commonHelpers';
 import {
 	BadRequestError,
 	InternalServerError,
@@ -45,7 +49,7 @@ export const v1GetUserLoginHistory = async (
 				createdAt: userLoginInfo!.createdAt,
 				isValid: userLoginInfo!.isValid,
 				loginMetaData: JSON.parse(
-					(await promisifiedAesEncryptData(userLoginInfo!.loginMetaData, process.env.ENCRYPT_KEY)) ?? '{}',
+					(await promisifiedAesDecryptData(userLoginInfo!.loginMetaData, process.env.ENCRYPT_KEY)) ?? '{}',
 				),
 			})),
 		);
