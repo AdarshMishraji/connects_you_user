@@ -95,6 +95,13 @@ export const v1Authenticate = async (
 					photoUrl: transactionResponse.userModelResponse?.photoUrl,
 					userId: transactionResponse.userModelResponse?._id.toString(),
 				},
+				loginInfo: {
+					loginId: transactionResponse.userLoginHistoryResponse?._id.toString(),
+					loginMetaData: clientMetaData,
+					userId: transactionResponse.userModelResponse?._id.toString(),
+					isValid: true,
+					createdAt: transactionResponse.userLoginHistoryResponse?.createdAt,
+				},
 			},
 		});
 	} catch (error) {
