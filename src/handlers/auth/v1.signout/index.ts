@@ -1,11 +1,6 @@
 import { SignoutRequest } from '@adarsh-mishra/connects_you_services/services/auth/SignoutRequest';
 import { SignoutResponse } from '@adarsh-mishra/connects_you_services/services/auth/SignoutResponse';
-import {
-	BadRequestError,
-	InternalServerError,
-	ResponseError,
-	NotFoundError,
-} from '@adarsh-mishra/node-utils/httpResponses';
+import { BadRequestError, NotFoundError } from '@adarsh-mishra/node-utils/httpResponses';
 import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
@@ -38,9 +33,6 @@ export const v1Signout = async (
 			throw new NotFoundError({ error: 'User not updated' });
 		}
 	} catch (error) {
-		if (error instanceof ResponseError) {
-			return errorCallback(callback, error);
-		}
-		return errorCallback(callback, new InternalServerError({ error }));
+		return errorCallback(callback, error);
 	}
 };

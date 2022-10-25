@@ -1,7 +1,8 @@
 import { AllUsersRequest } from '@adarsh-mishra/connects_you_services/services/user/AllUsersRequest';
 import { AllUsersResponse } from '@adarsh-mishra/connects_you_services/services/user/AllUsersResponse';
-import { bulkAesDecrypt, isEmptyEntity, mongoose } from '@adarsh-mishra/node-utils';
-import { InternalServerError, NotFoundError, ResponseError } from '@adarsh-mishra/node-utils/httpResponses';
+import { bulkAesDecrypt, isEmptyEntity } from '@adarsh-mishra/node-utils/commonHelpers';
+import { NotFoundError } from '@adarsh-mishra/node-utils/httpResponses';
+import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
 import { errorCallback } from '../../../helpers/errorCallback';
@@ -61,9 +62,6 @@ export const v1GetAllUsers = async (
 			},
 		});
 	} catch (error) {
-		if (error instanceof ResponseError) {
-			return errorCallback(callback, error);
-		}
-		return errorCallback(callback, new InternalServerError({ error }));
+		return errorCallback(callback, error);
 	}
 };

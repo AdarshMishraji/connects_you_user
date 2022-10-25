@@ -1,16 +1,7 @@
 import { UserLoginHistoryRequest } from '@adarsh-mishra/connects_you_services/services/user/UserLoginHistoryRequest';
 import { UserLoginHistoryResponse } from '@adarsh-mishra/connects_you_services/services/user/UserLoginHistoryResponse';
-import {
-	isEmptyEntity,
-	promisifiedAesDecryptData,
-	promisifiedAesEncryptData,
-} from '@adarsh-mishra/node-utils/commonHelpers';
-import {
-	BadRequestError,
-	InternalServerError,
-	NotFoundError,
-	ResponseError,
-} from '@adarsh-mishra/node-utils/httpResponses';
+import { isEmptyEntity, promisifiedAesDecryptData } from '@adarsh-mishra/node-utils/commonHelpers';
+import { BadRequestError, NotFoundError } from '@adarsh-mishra/node-utils/httpResponses';
 import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
@@ -62,9 +53,6 @@ export const v1GetUserLoginHistory = async (
 			},
 		});
 	} catch (error) {
-		if (error instanceof ResponseError) {
-			return errorCallback(callback, error);
-		}
-		return errorCallback(callback, new InternalServerError({ error }));
+		return errorCallback(callback, error);
 	}
 };

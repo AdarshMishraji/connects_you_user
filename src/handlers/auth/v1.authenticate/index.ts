@@ -1,12 +1,7 @@
 import { AuthenticateRequest } from '@adarsh-mishra/connects_you_services/services/auth/AuthenticateRequest';
 import { AuthenticateResponse } from '@adarsh-mishra/connects_you_services/services/auth/AuthenticateResponse';
 import { aesEncryptData, hashData, isEmptyEntity, jwt } from '@adarsh-mishra/node-utils/commonHelpers';
-import {
-	BadRequestError,
-	InternalServerError,
-	ResponseError,
-	NoDataError,
-} from '@adarsh-mishra/node-utils/httpResponses';
+import { BadRequestError, NoDataError } from '@adarsh-mishra/node-utils/httpResponses';
 import { createSessionTransaction } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
@@ -103,9 +98,6 @@ export const v1Authenticate = async (
 			},
 		});
 	} catch (error) {
-		if (error instanceof ResponseError) {
-			return errorCallback(callback, error);
-		}
-		return errorCallback(callback, new InternalServerError({ error }));
+		return errorCallback(callback, error);
 	}
 };
