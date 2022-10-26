@@ -8,7 +8,7 @@ import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 import { errorCallback } from '../../../helpers/errorCallback';
 import { UserLoginHistoryModel } from '../../../models';
 
-export const v1GetUserLoginHistory = async (
+export const getUserLoginHistory = async (
 	req: ServerUnaryCall<UserLoginHistoryRequest, UserLoginHistoryResponse>,
 	callback: sendUnaryData<UserLoginHistoryResponse>,
 ) => {
@@ -37,7 +37,7 @@ export const v1GetUserLoginHistory = async (
 			userLoginHistory.map(async (userLoginInfo) => ({
 				userId: userLoginInfo!.userId.toString(),
 				loginId: userLoginInfo!._id.toString(),
-				createdAt: userLoginInfo!.createdAt,
+				createdAt: userLoginInfo!.createdAt?.toISOString(),
 				isValid: userLoginInfo!.isValid,
 				loginMetaData: JSON.parse(
 					(await promisifiedAesDecryptData(userLoginInfo!.loginMetaData, process.env.ENCRYPT_KEY)) ?? '{}',

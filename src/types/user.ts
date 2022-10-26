@@ -11,8 +11,8 @@ export interface IUser {
 	emailVerified: boolean;
 	authProvider: string;
 	locale: string;
-	createdAt?: string;
-	updatedAt?: string;
+	createdAt?: Date;
+	updatedAt?: Date;
 }
 
 export type TUser = IUser | TokenPayload;

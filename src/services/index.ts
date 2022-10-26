@@ -4,14 +4,14 @@ import { ProtoGrpcType as UserProtoGrpcType } from '@adarsh-mishra/connects_you_
 import { Redis } from '@adarsh-mishra/node-utils/redisHelpers';
 import { Server, ServerCredentials } from '@grpc/grpc-js';
 
-import { v1Authenticate } from '../handlers/auth/v1.authenticate';
-import { v1RefreshToken } from '../handlers/auth/v1.refreshToken';
-import { v1Signout } from '../handlers/auth/v1.signout';
-import { v1UpdateFcmToken } from '../handlers/auth/v1.updateFcmToken';
-import { v1GetAllUsers } from '../handlers/user/v1.getAllUsers';
-import { v1GetUserDetails } from '../handlers/user/v1.getUserDetails';
-import { v1GetUserLoginHistory } from '../handlers/user/v1.getUserLoginHistory';
-import { v1GetUserLoginInfo } from '../handlers/user/v1.getUserLoginInfo';
+import { authenticate } from '../handlers/auth/authenticate';
+import { refreshToken } from '../handlers/auth/refreshToken';
+import { signout } from '../handlers/auth/signout';
+import { updateFcmToken } from '../handlers/auth/updateFcmToken';
+import { getAllUsers } from '../handlers/user/getAllUsers';
+import { getUserDetails } from '../handlers/user/getUserDetails';
+import { getUserLoginHistory } from '../handlers/user/getUserLoginHistory';
+import { getUserLoginInfo } from '../handlers/user/getUserLoginInfo';
 import { handlerWrapper } from '../helpers/grpcHandlersWrapper';
 
 const port = `0.0.0.0:${process.env.PORT || 1000}`;
@@ -25,16 +25,16 @@ export const createGRPCServer = ({ redisClient }: { redisClient: Redis }) => {
 	const server = new Server({ 'grpc.keepalive_permit_without_calls': 1 });
 
 	server.addService(ServiceProviders.auth.AuthServices.service, {
-		authenticate: handlerWrapper(v1Authenticate, { redisClient }),
-		refreshToken: handlerWrapper(v1RefreshToken, { redisClient }),
-		signout: handlerWrapper(v1Signout, { redisClient }),
-		updateFcmToken: handlerWrapper(v1UpdateFcmToken, { redisClient }),
+		authenticate: handlerWrapper(authenticate, { redisClient }),
+		refreshToken: handlerWrapper(refreshToken, { redisClient }),
+		signout: handlerWrapper(signout, { redisClient }),
+		updateFcmToken: handlerWrapper(updateFcmToken, { redisClient }),
 	});
 	server.addService(ServiceProviders.user.UserServices.service, {
-		getUserLoginInfo: handlerWrapper(v1GetUserLoginInfo, { redisClient }),
-		getUserDetails: handlerWrapper(v1GetUserDetails, { redisClient }),
-		getAllUsers: handlerWrapper(v1GetAllUsers, { redisClient }),
-		getUserLoginHistory: handlerWrapper(v1GetUserLoginHistory, { redisClient }),
+		getUserLoginInfo: handlerWrapper(getUserLoginInfo, { redisClient }),
+		getUserDetails: handlerWrapper(getUserDetails, { redisClient }),
+		getAllUsers: handlerWrapper(getAllUsers, { redisClient }),
+		getUserLoginHistory: handlerWrapper(getUserLoginHistory, { redisClient }),
 	});
 
 	server.bindAsync(port.toString(), ServerCredentials.createInsecure(), (error, port) => {

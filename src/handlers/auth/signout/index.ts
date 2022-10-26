@@ -8,7 +8,7 @@ import { errorCallback } from '../../../helpers/errorCallback';
 import { validateAccess } from '../../../middlewares';
 import { UserLoginHistoryModel } from '../../../models';
 
-export const v1Signout = async (
+export const signout = async (
 	req: ServerUnaryCall<SignoutRequest, SignoutResponse>,
 	callback: sendUnaryData<SignoutResponse>,
 ) => {

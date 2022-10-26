@@ -11,7 +11,7 @@ import { UserLoginHistoryModel } from '../../../models';
 import { UserRefreshTokenModel } from '../../../models/userRefreshToken.model';
 import { TokenTypesEnum } from '../types';
 
-export const v1RefreshToken = async (
+export const refreshToken = async (
 	req: ServerUnaryCall<RefreshTokenRequest, RefreshTokenResponse>,
 	callback: sendUnaryData<RefreshTokenResponse>,
 ) => {

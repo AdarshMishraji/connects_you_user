@@ -8,7 +8,7 @@ import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 import { errorCallback } from '../../../helpers/errorCallback';
 import { UserLoginHistoryModel } from '../../../models';
 
-export const v1GetUserLoginInfo = async (
+export const getUserLoginInfo = async (
 	req: ServerUnaryCall<UserLoginInfoRequest, UserLoginInfoResponse>,
 	callback: sendUnaryData<UserLoginInfoResponse>,
 ) => {
@@ -37,7 +37,7 @@ export const v1GetUserLoginInfo = async (
 					),
 					userId: userLoginInfo!.userId.toString(),
 					loginId: userLoginInfo!._id.toString(),
-					createdAt: userLoginInfo!.createdAt,
+					createdAt: userLoginInfo!.createdAt?.toISOString(),
 					isValid: userLoginInfo!.isValid,
 				},
 			},

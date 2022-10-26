@@ -4,7 +4,7 @@ import { userLoginHistory } from '../schemas';
 import { IUserLoginHistory } from '../types';
 
 export const UserLoginHistoryModel = mongoose.model<IUserLoginHistory>(
-	userLoginHistory.collectionName,
+	userLoginHistory.schemaName,
 	userLoginHistory.schema,
-	userLoginHistory.collectionName,
+	userLoginHistory.schemaName,
 );

@@ -9,7 +9,7 @@ import { errorCallback } from '../../../helpers/errorCallback';
 import { UserModel } from '../../../models';
 import { IUser } from '../../../types';
 
-export const v1GetUserDetails = async (
+export const getUserDetails = async (
 	req: ServerUnaryCall<UserDetailsRequest, UserDetailsResponse>,
 	callback: sendUnaryData<UserDetailsResponse>,
 ) => {
@@ -52,8 +52,8 @@ export const v1GetUserDetails = async (
 			responseStatus: 'SUCCESS',
 			data: {
 				user: {
-					createdAt: userResponse.createdAt,
-					updatedAt: userResponse.updatedAt,
+					createdAt: userResponse.createdAt?.toISOString(),
+					updatedAt: userResponse.updatedAt?.toISOString(),
 					userId: userResponse._id.toString(),
 					...bulkAesDecryptData,
 				},

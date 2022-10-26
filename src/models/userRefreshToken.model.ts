@@ -4,7 +4,7 @@ import { userRefreshToken } from '../schemas';
 import { IUserRefreshToken } from '../types';
 
 export const UserRefreshTokenModel = mongoose.model<IUserRefreshToken>(
-	userRefreshToken.collectionName,
+	userRefreshToken.schemaName,
 	userRefreshToken.schema,
-	userRefreshToken.collectionName,
+	userRefreshToken.schemaName,
 );

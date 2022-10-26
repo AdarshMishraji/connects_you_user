@@ -8,7 +8,7 @@ import { errorCallback } from '../../../helpers/errorCallback';
 import { validateAccess } from '../../../middlewares';
 import { UserModel } from '../../../models';
 
-export const v1UpdateFcmToken = async (
+export const updateFcmToken = async (
 	req: ServerUnaryCall<UpdateFcmTokenRequest, UpdateFcmTokenResponse>,
 	callback: sendUnaryData<UpdateFcmTokenResponse>,
 ) => {

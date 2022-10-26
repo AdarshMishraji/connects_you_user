@@ -14,7 +14,7 @@ import { login } from './login';
 import { signup } from './signup';
 import { validateOAuth2Token } from './validOAuth2Token';
 
-export const v1Authenticate = async (
+export const authenticate = async (
 	req: ServerUnaryCall<AuthenticateRequest, AuthenticateResponse>,
 	callback: sendUnaryData<AuthenticateResponse>,
 ) => {

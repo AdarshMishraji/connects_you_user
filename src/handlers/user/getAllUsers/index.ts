@@ -9,7 +9,7 @@ import { errorCallback } from '../../../helpers/errorCallback';
 import { UserModel } from '../../../models';
 import { IUser } from '../../../types';
 
-export const v1GetAllUsers = async (
+export const getAllUsers = async (
 	req: ServerUnaryCall<AllUsersRequest, AllUsersResponse>,
 	callback: sendUnaryData<AllUsersResponse>,
 ) => {
@@ -48,8 +48,8 @@ export const v1GetAllUsers = async (
 				);
 				return {
 					userId: user!._id.toString(),
-					createdAt: user!.createdAt,
-					updatedAt: user!.updatedAt,
+					createdAt: user!.createdAt?.toISOString(),
+					updatedAt: user!.updatedAt?.toISOString(),
 					...bulkAesDecryptData,
 				};
 			}),

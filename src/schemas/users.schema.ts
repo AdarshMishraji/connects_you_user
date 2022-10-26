@@ -2,7 +2,7 @@ import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
 
 import { IUser } from '../types/user';
 
-export const collectionName = 'users';
+export const schemaName = 'users';
 export const schema = new mongoose.Schema<IUser>(
 	{
 		name: {

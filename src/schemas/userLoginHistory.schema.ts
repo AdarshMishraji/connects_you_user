@@ -2,12 +2,15 @@ import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
 
 import { IUserLoginHistory } from '../types/userLoginHistory';
 
-export const collectionName = 'userLoginHistory';
+import { schemaName as UsersSchemaName } from './users.schema';
+
+export const schemaName = 'userLoginHistory';
 export const schema = new mongoose.Schema<IUserLoginHistory>(
 	{
 		userId: {
 			type: mongoose.SchemaTypes.ObjectId,
 			required: true,
+			ref: UsersSchemaName,
 		},
 		loginMetaData: {
 			type: mongoose.SchemaTypes.String,
@@ -19,5 +22,5 @@ export const schema = new mongoose.Schema<IUserLoginHistory>(
 			default: true,
 		},
 	},
-	{ timestamps: true, collection: collectionName },
+	{ timestamps: true, collection: schemaName },
 );
