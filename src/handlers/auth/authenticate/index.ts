@@ -1,13 +1,12 @@
 import { AuthenticateRequest } from '@adarsh-mishra/connects_you_services/services/auth/AuthenticateRequest';
 import { AuthenticateResponse } from '@adarsh-mishra/connects_you_services/services/auth/AuthenticateResponse';
 import { aesEncryptData, hashData, isEmptyEntity, jwt } from '@adarsh-mishra/node-utils/commonHelpers';
-import { BadRequestError, NoDataError } from '@adarsh-mishra/node-utils/httpResponses';
+import { BadRequestError, NotFoundError } from '@adarsh-mishra/node-utils/httpResponses';
 import { createSessionTransaction } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
 import { errorCallback } from '../../../helpers/errorCallback';
 import { fetchUserDetails } from '../../../helpers/fetchUserDetails';
-import { validateAccess } from '../../../middlewares';
 import { TokenTypesEnum, AuthTypeEnum } from '../types';
 
 import { login } from './login';
@@ -19,7 +18,6 @@ export const authenticate = async (
 	callback: sendUnaryData<AuthenticateResponse>,
 ) => {
 	try {
-		validateAccess(req);
 		const { token, publicKey, fcmToken, clientMetaData } = req.request;
 		if (!token || !publicKey || !fcmToken) {
 			throw new BadRequestError({
@@ -40,7 +38,7 @@ export const authenticate = async (
 			? aesEncryptData(JSON.stringify(clientMetaData), process.env.ENCRYPT_KEY) ?? undefined
 			: undefined;
 
-		const transactionResponse = await createSessionTransaction(async (session) => {
+		const { method, userLoginHistoryResponse, userResponse } = await createSessionTransaction(async (session) => {
 			if (existedUser) {
 				const data = await login({
 					existedUserId: existedUser._id,
@@ -64,17 +62,13 @@ export const authenticate = async (
 			}
 		});
 
-		if (
-			isEmptyEntity(transactionResponse) ||
-			!transactionResponse.userModelResponse?._id ||
-			!transactionResponse.userLoginHistoryResponse?._id
-		) {
-			throw new NoDataError({ error: 'No data found' });
+		if (isEmptyEntity(userResponse) || isEmptyEntity(userLoginHistoryResponse)) {
+			throw new NotFoundError({ error: 'No data found' });
 		}
 
 		const payload = {
-			userId: transactionResponse.userModelResponse?._id.toString(),
-			loginId: transactionResponse.userLoginHistoryResponse?._id.toString(),
+			userId: userResponse.userId,
+			loginId: userLoginHistoryResponse.loginId,
 			type: TokenTypesEnum.INITIAL_TOKEN,
 		};
 
@@ -83,24 +77,21 @@ export const authenticate = async (
 		return callback(null, {
 			responseStatus: 'SUCCESS',
 			data: {
-				method: transactionResponse.method,
+				method,
 				user: {
 					token: tokenForResponse,
-					publicKey:
-						transactionResponse.method === AuthTypeEnum.LOGIN
-							? transactionResponse.userModelResponse?.publicKey
-							: undefined,
-					name: transactionResponse.userModelResponse?.name,
-					email: transactionResponse.userModelResponse?.email,
-					photoUrl: transactionResponse.userModelResponse?.photoUrl,
-					userId: transactionResponse.userModelResponse?._id.toString(),
+					publicKey: method === AuthTypeEnum.LOGIN ? userResponse.publicKey : undefined,
+					name: userResponse.name,
+					email: userResponse.email,
+					photoUrl: userResponse.photoUrl,
+					userId: userResponse.userId,
 				},
 				loginInfo: {
-					loginId: transactionResponse.userLoginHistoryResponse?._id.toString(),
+					loginId: userLoginHistoryResponse.loginId,
 					loginMetaData: clientMetaData,
-					userId: transactionResponse.userModelResponse?._id.toString(),
+					userId: userLoginHistoryResponse.userId,
 					isValid: true,
-					createdAt: transactionResponse.userLoginHistoryResponse?.createdAt,
+					createdAt: userLoginHistoryResponse.createdAt,
 				},
 			},
 		});

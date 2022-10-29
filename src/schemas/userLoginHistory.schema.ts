@@ -1,11 +1,11 @@
 import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
 
-import { IUserLoginHistory } from '../types/userLoginHistory';
+import { IUserLoginHistoryRaw } from '../types/userLoginHistory';
 
 import { schemaName as UsersSchemaName } from './users.schema';
 
 export const schemaName = 'userLoginHistory';
-export const schema = new mongoose.Schema<IUserLoginHistory>(
+export const schema = new mongoose.Schema<IUserLoginHistoryRaw>(
 	{
 		userId: {
 			type: mongoose.SchemaTypes.ObjectId,

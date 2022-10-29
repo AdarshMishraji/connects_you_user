@@ -1,6 +1,7 @@
+import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { TokenPayload } from 'google-auth-library';
 
-export interface IUser {
+export interface IUserBase {
 	email: string;
 	emailHash: string;
 	name: string;
@@ -11,8 +12,18 @@ export interface IUser {
 	emailVerified: boolean;
 	authProvider: string;
 	locale: string;
+}
+
+export interface IUserClean extends IUserBase {
+	userId: string;
+	createdAt?: string;
+	updatedAt?: string;
+}
+
+export interface IUserRaw extends IUserBase {
+	_id: mongoose.Types.ObjectId;
 	createdAt?: Date;
 	updatedAt?: Date;
 }
 
-export type TUser = IUser | TokenPayload;
+export type TUser = IUserBase | TokenPayload;

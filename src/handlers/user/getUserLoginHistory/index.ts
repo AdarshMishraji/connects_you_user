@@ -1,12 +1,24 @@
+import { UserLoginInfo } from '@adarsh-mishra/connects_you_services/services/auth/UserLoginInfo';
 import { UserLoginHistoryRequest } from '@adarsh-mishra/connects_you_services/services/user/UserLoginHistoryRequest';
 import { UserLoginHistoryResponse } from '@adarsh-mishra/connects_you_services/services/user/UserLoginHistoryResponse';
 import { isEmptyEntity, promisifiedAesDecryptData } from '@adarsh-mishra/node-utils/commonHelpers';
 import { BadRequestError, NotFoundError } from '@adarsh-mishra/node-utils/httpResponses';
-import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
+import { MongoObjectId } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
 import { errorCallback } from '../../../helpers/errorCallback';
 import { UserLoginHistoryModel } from '../../../models';
+import { IUserLoginHistoryRaw } from '../../../types';
+
+const prepareResponseForLoginHistory = async (userLoginInfo: IUserLoginHistoryRaw): Promise<UserLoginInfo> => ({
+	userId: userLoginInfo!.userId.toString(),
+	loginId: userLoginInfo!._id.toString(),
+	createdAt: userLoginInfo!.createdAt?.toISOString(),
+	isValid: userLoginInfo!.isValid,
+	loginMetaData: JSON.parse(
+		(await promisifiedAesDecryptData(userLoginInfo!.loginMetaData, process.env.ENCRYPT_KEY)) ?? '{}',
+	),
+});
 
 export const getUserLoginHistory = async (
 	req: ServerUnaryCall<UserLoginHistoryRequest, UserLoginHistoryResponse>,
@@ -18,7 +30,7 @@ export const getUserLoginHistory = async (
 			throw new BadRequestError({ error: 'Invalid request. Please provide loginId and userId' });
 		}
 
-		const userIdObjectId = new mongoose.Types.ObjectId(userId);
+		const userIdObjectId = MongoObjectId(userId);
 		const [userLoginHistory, total] = await Promise.all([
 			UserLoginHistoryModel.find({
 				userId: userIdObjectId,
@@ -33,17 +45,7 @@ export const getUserLoginHistory = async (
 
 		if (isEmptyEntity(userLoginHistory)) throw new NotFoundError({ error: 'user login History not found' });
 
-		const userLoginHistoryData = await Promise.all(
-			userLoginHistory.map(async (userLoginInfo) => ({
-				userId: userLoginInfo!.userId.toString(),
-				loginId: userLoginInfo!._id.toString(),
-				createdAt: userLoginInfo!.createdAt?.toISOString(),
-				isValid: userLoginInfo!.isValid,
-				loginMetaData: JSON.parse(
-					(await promisifiedAesDecryptData(userLoginInfo!.loginMetaData, process.env.ENCRYPT_KEY)) ?? '{}',
-				),
-			})),
-		);
+		const userLoginHistoryData = await Promise.all(userLoginHistory.map(prepareResponseForLoginHistory));
 
 		return callback(null, {
 			responseStatus: 'SUCCESS',

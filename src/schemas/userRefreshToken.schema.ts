@@ -1,11 +1,11 @@
 import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
 
-import { IUserRefreshToken } from '../types';
+import { IUserRefreshTokenRaw } from '../types';
 
 import { schemaName as userLoginHistorySchemaName } from './userLoginHistory.schema';
 
 export const schemaName = 'userRefreshToken';
-export const schema = new mongoose.Schema<IUserRefreshToken>(
+export const schema = new mongoose.Schema<IUserRefreshTokenRaw>(
 	{
 		loginId: {
 			type: mongoose.SchemaTypes.ObjectId,

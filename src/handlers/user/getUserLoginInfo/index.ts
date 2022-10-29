@@ -2,7 +2,7 @@ import { UserLoginInfoRequest } from '@adarsh-mishra/connects_you_services/servi
 import { UserLoginInfoResponse } from '@adarsh-mishra/connects_you_services/services/user/UserLoginInfoResponse';
 import { aesDecryptData, isEmptyEntity } from '@adarsh-mishra/node-utils/commonHelpers';
 import { BadRequestError, NotFoundError } from '@adarsh-mishra/node-utils/httpResponses';
-import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
+import { MongoObjectId } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
 import { errorCallback } from '../../../helpers/errorCallback';
@@ -18,9 +18,16 @@ export const getUserLoginInfo = async (
 			throw new BadRequestError({ error: 'Invalid request. Please provide loginId and userId' });
 		}
 
+		const loginIdObj = MongoObjectId(loginId);
+		const userIdObj = MongoObjectId(userId);
+
+		if (!loginIdObj || !userIdObj) {
+			throw new BadRequestError({ error: 'Invalid request. Please provide valid loginId and userId' });
+		}
+
 		const userLoginInfo = await UserLoginHistoryModel.findOne({
-			_id: new mongoose.Types.ObjectId(loginId),
-			userId: new mongoose.Types.ObjectId(userId),
+			_id: loginIdObj,
+			userId: userIdObj,
 			isValid: true,
 		})
 			.lean()

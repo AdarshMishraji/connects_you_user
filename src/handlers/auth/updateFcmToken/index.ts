@@ -1,7 +1,7 @@
 import { UpdateFcmTokenRequest } from '@adarsh-mishra/connects_you_services/services/auth/UpdateFcmTokenRequest';
 import { UpdateFcmTokenResponse } from '@adarsh-mishra/connects_you_services/services/auth/UpdateFcmTokenResponse';
 import { BadRequestError, NotFoundError } from '@adarsh-mishra/node-utils/httpResponses';
-import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
+import { MongoObjectId } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
 import { errorCallback } from '../../../helpers/errorCallback';
@@ -19,10 +19,13 @@ export const updateFcmToken = async (
 			throw new BadRequestError({ error: 'Invalid request. Please provide fcmToken and userId' });
 		}
 
-		const updatedUser = await UserModel.updateOne(
-			{ _id: new mongoose.Types.ObjectId(userId) },
-			{ fcmToken },
-		).exec();
+		const userIdObj = MongoObjectId(userId);
+
+		if (!userIdObj) {
+			throw new BadRequestError({ error: 'Invalid request. Please provide valid userId' });
+		}
+
+		const updatedUser = await UserModel.updateOne({ _id: userIdObj }, { fcmToken }).exec();
 
 		if (updatedUser.modifiedCount === 0) {
 			throw new NotFoundError({ error: 'userId not found' });

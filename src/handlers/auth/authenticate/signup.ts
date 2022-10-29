@@ -1,9 +1,11 @@
+import { UserLoginInfo } from '@adarsh-mishra/connects_you_services/services/auth/UserLoginInfo';
+import { UserDetails } from '@adarsh-mishra/connects_you_services/services/user/UserDetails';
 import { bulkAesEncrypt } from '@adarsh-mishra/node-utils/commonHelpers';
 import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { TokenPayload } from 'google-auth-library';
 
 import { UserLoginHistoryModel, UserModel } from '../../../models';
-import { IUser } from '../../../types';
+import { IUserBase } from '../../../types';
 import { AuthTypeEnum } from '../types';
 
 export type TSignupParams = {
@@ -15,6 +17,12 @@ export type TSignupParams = {
 	loginMetaData?: string;
 };
 
+export type TSignupOutput = {
+	method: AuthTypeEnum.SIGNUP;
+	userResponse: UserDetails;
+	userLoginHistoryResponse: UserLoginInfo;
+};
+
 export const signup = async ({
 	oAuth2Response,
 	publicKey,
@@ -22,8 +30,8 @@ export const signup = async ({
 	fcmToken,
 	session,
 	loginMetaData,
-}: TSignupParams) => {
-	const bulkAesEncryptData = await bulkAesEncrypt<Pick<IUser, 'name' | 'email' | 'photoUrl' | 'publicKey'>>(
+}: TSignupParams): Promise<TSignupOutput> => {
+	const bulkEncryptedUserData = await bulkAesEncrypt<Pick<IUserBase, 'name' | 'email' | 'photoUrl' | 'publicKey'>>(
 		{
 			name: oAuth2Response.name!,
 			email: oAuth2Response.email!,
@@ -32,33 +40,42 @@ export const signup = async ({
 		},
 		process.env.ENCRYPT_KEY,
 	);
-	const user: IUser = {
-		...bulkAesEncryptData,
+
+	const user = {
 		photoUrl: '',
 		emailHash: userEmailHash,
 		emailVerified: oAuth2Response.email_verified ?? false,
 		authProvider: oAuth2Response.iss,
 		locale: oAuth2Response.locale ?? 'en',
 		fcmToken,
+		...bulkEncryptedUserData,
 	};
 
-	const userModelResponse = await new UserModel(user).save({ session });
+	const userSaveResponse = await new UserModel(user).save({ session });
 	const userLoginHistoryResponse = await new UserLoginHistoryModel({
-		userId: userModelResponse._id,
+		userId: userSaveResponse._id,
 		loginMetaData,
 	}).save({
 		session,
 	});
 
 	return {
-		userModelResponse: {
-			_id: userModelResponse._id.toString(),
-			name: oAuth2Response.name,
-			email: oAuth2Response.email,
+		userResponse: {
+			userId: userSaveResponse._id.toString(),
+			name: oAuth2Response.name ?? '',
+			email: oAuth2Response.email ?? '',
 			photoUrl: oAuth2Response.picture,
 			publicKey,
+			createdAt: userSaveResponse.createdAt?.toISOString(),
+			updatedAt: userSaveResponse.updatedAt?.toISOString(),
 		},
-		userLoginHistoryResponse,
+		userLoginHistoryResponse: Object.assign(userLoginHistoryResponse, {
+			userId: userLoginHistoryResponse.userId.toString(),
+			loginId: userLoginHistoryResponse._id.toString(),
+			createdAt: userLoginHistoryResponse.createdAt?.toISOString(),
+			updatedAt: userLoginHistoryResponse.updatedAt?.toISOString(),
+			loginMetaData: undefined,
+		}),
 		method: AuthTypeEnum.SIGNUP,
 	};
 };
