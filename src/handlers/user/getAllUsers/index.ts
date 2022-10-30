@@ -1,5 +1,6 @@
 import { AllUsersRequest } from '@adarsh-mishra/connects_you_services/services/user/AllUsersRequest';
 import { AllUsersResponse } from '@adarsh-mishra/connects_you_services/services/user/AllUsersResponse';
+import { ResponseStatusEnum } from '@adarsh-mishra/connects_you_services/services/user/ResponseStatusEnum';
 import { UserDetails } from '@adarsh-mishra/connects_you_services/services/user/UserDetails';
 import { bulkAesDecrypt, isEmptyEntity } from '@adarsh-mishra/node-utils/commonHelpers';
 import { NotFoundError } from '@adarsh-mishra/node-utils/httpResponses';
@@ -58,7 +59,7 @@ export const getAllUsers = async (
 		const usersData = await Promise.all(usersResponse.map(prepareResponseForUser));
 
 		return callback(null, {
-			responseStatus: 'SUCCESS',
+			responseStatus: ResponseStatusEnum.SUCCESS,
 			data: {
 				users: usersData,
 			},

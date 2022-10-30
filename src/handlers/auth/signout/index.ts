@@ -1,3 +1,4 @@
+import { ResponseStatusEnum } from '@adarsh-mishra/connects_you_services/services/auth/ResponseStatusEnum';
 import { SignoutRequest } from '@adarsh-mishra/connects_you_services/services/auth/SignoutRequest';
 import { SignoutResponse } from '@adarsh-mishra/connects_you_services/services/auth/SignoutResponse';
 import { BadRequestError, NotFoundError } from '@adarsh-mishra/node-utils/httpResponses';
@@ -35,7 +36,7 @@ export const signout = async (
 		).exec();
 		if (updatedUserLoginHistory.modifiedCount > 0) {
 			return callback(null, {
-				responseStatus: 'SUCCESS',
+				responseStatus: ResponseStatusEnum.SUCCESS,
 			});
 		} else {
 			throw new NotFoundError({ error: 'User not updated' });

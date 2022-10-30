@@ -1,3 +1,4 @@
+import { ResponseStatusEnum } from '@adarsh-mishra/connects_you_services/services/auth/ResponseStatusEnum';
 import { UpdateFcmTokenRequest } from '@adarsh-mishra/connects_you_services/services/auth/UpdateFcmTokenRequest';
 import { UpdateFcmTokenResponse } from '@adarsh-mishra/connects_you_services/services/auth/UpdateFcmTokenResponse';
 import { BadRequestError, NotFoundError } from '@adarsh-mishra/node-utils/httpResponses';
@@ -31,7 +32,7 @@ export const updateFcmToken = async (
 			throw new NotFoundError({ error: 'userId not found' });
 		}
 		return callback(null, {
-			responseStatus: 'SUCCESS',
+			responseStatus: ResponseStatusEnum.SUCCESS,
 		});
 	} catch (error) {
 		return errorCallback(callback, error);

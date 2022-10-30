@@ -1,4 +1,5 @@
 import { UserLoginInfo } from '@adarsh-mishra/connects_you_services/services/auth/UserLoginInfo';
+import { ResponseStatusEnum } from '@adarsh-mishra/connects_you_services/services/user/ResponseStatusEnum';
 import { UserLoginHistoryRequest } from '@adarsh-mishra/connects_you_services/services/user/UserLoginHistoryRequest';
 import { UserLoginHistoryResponse } from '@adarsh-mishra/connects_you_services/services/user/UserLoginHistoryResponse';
 import { isEmptyEntity, promisifiedAesDecryptData } from '@adarsh-mishra/node-utils/commonHelpers';
@@ -48,7 +49,7 @@ export const getUserLoginHistory = async (
 		const userLoginHistoryData = await Promise.all(userLoginHistory.map(prepareResponseForLoginHistory));
 
 		return callback(null, {
-			responseStatus: 'SUCCESS',
+			responseStatus: ResponseStatusEnum.SUCCESS,
 			data: {
 				userLoginHistory: userLoginHistoryData,
 				total,

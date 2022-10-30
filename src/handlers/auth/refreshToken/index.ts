@@ -1,5 +1,7 @@
 import { RefreshTokenRequest } from '@adarsh-mishra/connects_you_services/services/auth/RefreshTokenRequest';
 import { RefreshTokenResponse } from '@adarsh-mishra/connects_you_services/services/auth/RefreshTokenResponse';
+import { ResponseStatusEnum } from '@adarsh-mishra/connects_you_services/services/auth/ResponseStatusEnum';
+import { TokenTypesEnum } from '@adarsh-mishra/connects_you_services/services/auth/TokenTypesEnum';
 import { aesEncryptData, jwt } from '@adarsh-mishra/node-utils/commonHelpers';
 import { BadRequestError } from '@adarsh-mishra/node-utils/httpResponses';
 import { MongoObjectId } from '@adarsh-mishra/node-utils/mongoHelpers';
@@ -8,7 +10,6 @@ import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 import { errorCallback } from '../../../helpers/errorCallback';
 import { UserLoginHistoryModel } from '../../../models';
 import { UserRefreshTokenModel } from '../../../models/userRefreshToken.model';
-import { TokenTypesEnum } from '../types';
 
 export const refreshToken = async (
 	req: ServerUnaryCall<RefreshTokenRequest, RefreshTokenResponse>,
@@ -55,7 +56,7 @@ export const refreshToken = async (
 		}).save();
 
 		return callback(null, {
-			responseStatus: 'SUCCESS',
+			responseStatus: ResponseStatusEnum.SUCCESS,
 			data: {
 				token,
 			},

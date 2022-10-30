@@ -1,3 +1,4 @@
+import { AuthTypeEnum } from '@adarsh-mishra/connects_you_services/services/auth/AuthTypeEnum';
 import { UserLoginInfo } from '@adarsh-mishra/connects_you_services/services/auth/UserLoginInfo';
 import { UserDetails } from '@adarsh-mishra/connects_you_services/services/user/UserDetails';
 import { bulkAesDecrypt, isEmptyEntity } from '@adarsh-mishra/node-utils/commonHelpers';
@@ -5,7 +6,6 @@ import { NotFoundError } from '@adarsh-mishra/node-utils/httpResponses';
 import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
 
 import { UserLoginHistoryModel, UserModel } from '../../../models';
-import { AuthTypeEnum } from '../types';
 
 export type TLoginParams = {
 	loginMetaData?: string;

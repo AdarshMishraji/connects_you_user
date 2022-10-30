@@ -1,3 +1,4 @@
+import { ResponseStatusEnum } from '@adarsh-mishra/connects_you_services/services/user/ResponseStatusEnum';
 import { UserDetailsRequest } from '@adarsh-mishra/connects_you_services/services/user/UserDetailsRequest';
 import { UserDetailsResponse } from '@adarsh-mishra/connects_you_services/services/user/UserDetailsResponse';
 import { bulkAesDecrypt, isEmptyEntity } from '@adarsh-mishra/node-utils/commonHelpers';
@@ -56,7 +57,7 @@ export const getUserDetails = async (
 		);
 
 		return callback(null, {
-			responseStatus: 'SUCCESS',
+			responseStatus: ResponseStatusEnum.SUCCESS,
 			data: {
 				user: {
 					createdAt: userResponse.createdAt?.toISOString(),

@@ -1,5 +1,8 @@
 import { AuthenticateRequest } from '@adarsh-mishra/connects_you_services/services/auth/AuthenticateRequest';
 import { AuthenticateResponse } from '@adarsh-mishra/connects_you_services/services/auth/AuthenticateResponse';
+import { AuthTypeEnum } from '@adarsh-mishra/connects_you_services/services/auth/AuthTypeEnum';
+import { ResponseStatusEnum } from '@adarsh-mishra/connects_you_services/services/auth/ResponseStatusEnum';
+import { TokenTypesEnum } from '@adarsh-mishra/connects_you_services/services/auth/TokenTypesEnum';
 import { aesEncryptData, hashData, isEmptyEntity, jwt } from '@adarsh-mishra/node-utils/commonHelpers';
 import { BadRequestError, NotFoundError } from '@adarsh-mishra/node-utils/httpResponses';
 import { createSessionTransaction } from '@adarsh-mishra/node-utils/mongoHelpers';
@@ -7,7 +10,6 @@ import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
 import { errorCallback } from '../../../helpers/errorCallback';
 import { fetchUserDetails } from '../../../helpers/fetchUserDetails';
-import { TokenTypesEnum, AuthTypeEnum } from '../types';
 
 import { login } from './login';
 import { signup } from './signup';
@@ -69,18 +71,18 @@ export const authenticate = async (
 		const payload = {
 			userId: userResponse.userId,
 			loginId: userLoginHistoryResponse.loginId,
-			type: TokenTypesEnum.INITIAL_TOKEN,
+			type: TokenTypesEnum[TokenTypesEnum.INITIAL_TOKEN],
 		};
 
 		const tokenForResponse = jwt.sign(payload, process.env.SECRET, { expiresIn: '30d' });
 
 		return callback(null, {
-			responseStatus: 'SUCCESS',
+			responseStatus: ResponseStatusEnum.SUCCESS,
 			data: {
 				method,
 				user: {
 					token: tokenForResponse,
-					publicKey: method === AuthTypeEnum.LOGIN ? userResponse.publicKey : undefined,
+					publicKey: method === AuthTypeEnum[AuthTypeEnum.LOGIN] ? userResponse.publicKey : undefined,
 					name: userResponse.name,
 					email: userResponse.email,
 					photoUrl: userResponse.photoUrl,

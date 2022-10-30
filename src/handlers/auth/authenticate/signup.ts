@@ -1,3 +1,4 @@
+import { AuthTypeEnum } from '@adarsh-mishra/connects_you_services/services/auth/AuthTypeEnum';
 import { UserLoginInfo } from '@adarsh-mishra/connects_you_services/services/auth/UserLoginInfo';
 import { UserDetails } from '@adarsh-mishra/connects_you_services/services/user/UserDetails';
 import { bulkAesEncrypt } from '@adarsh-mishra/node-utils/commonHelpers';
@@ -6,7 +7,6 @@ import { TokenPayload } from 'google-auth-library';
 
 import { UserLoginHistoryModel, UserModel } from '../../../models';
 import { IUserBase } from '../../../types';
-import { AuthTypeEnum } from '../types';
 
 export type TSignupParams = {
 	oAuth2Response: TokenPayload;

@@ -1,3 +1,4 @@
+import { ResponseStatusEnum } from '@adarsh-mishra/connects_you_services/services/user/ResponseStatusEnum';
 import { UserLoginInfoRequest } from '@adarsh-mishra/connects_you_services/services/user/UserLoginInfoRequest';
 import { UserLoginInfoResponse } from '@adarsh-mishra/connects_you_services/services/user/UserLoginInfoResponse';
 import { aesDecryptData, isEmptyEntity } from '@adarsh-mishra/node-utils/commonHelpers';
@@ -36,7 +37,7 @@ export const getUserLoginInfo = async (
 		if (isEmptyEntity(userLoginInfo)) throw new NotFoundError({ error: 'user login info not found' });
 
 		return callback(null, {
-			responseStatus: 'SUCCESS',
+			responseStatus: ResponseStatusEnum.SUCCESS,
 			data: {
 				userLoginInfo: {
 					loginMetaData: JSON.parse(

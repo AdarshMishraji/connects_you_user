@@ -12,7 +12,8 @@
 		"kill": "sudo kill -9 `sudo lsof -t -i:1000`",
 		"testMultiDocumentTransactionInMongoDB": "tsc -p tsconfig.release.json && node ./build/src/scripts/testMultiDocumentTransactionInMongoDB.js",
 		"testScript": "tsc -p tsconfig.release.json && node ./build/src/scripts/test.js",
-		"lint": "eslint ./src --ext .ts,.js --fix"
+		"lint": "eslint ./src --ext .ts,.js --fix",
+		"reinstall-nm": "rm -rf node_modules yarn.lock && yarn cache clean && touch yarn.lock && yarn"
 	},
 	"author": "Adarsh Mishra",
 	"license": "ISC",
