@@ -1,18 +1,21 @@
-import { mongoose } from '@adarsh-mishra/node-utils';
+import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
 
-import { IUserRefreshToken } from '../types';
+import { IUserRefreshTokenRaw } from '../types';
 
-export const collectionName = 'userRefreshToken';
-export const schema = new mongoose.Schema<IUserRefreshToken>(
+import { schemaName as userLoginHistorySchemaName } from './userLoginHistory.schema';
+
+export const schemaName = 'userRefreshToken';
+export const schema = new mongoose.Schema<IUserRefreshTokenRaw>(
 	{
 		loginId: {
 			type: mongoose.SchemaTypes.ObjectId,
 			required: true,
+			ref: userLoginHistorySchemaName,
 		},
 		loginMetaData: {
 			type: mongoose.SchemaTypes.String,
 			required: true,
 		},
 	},
-	{ timestamps: true, collection: collectionName },
+	{ timestamps: true, collection: schemaName },
 );

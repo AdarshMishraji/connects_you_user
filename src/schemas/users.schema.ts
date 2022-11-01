@@ -1,9 +1,9 @@
-import { mongoose } from '@adarsh-mishra/node-utils';
+import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
 
-import { IUser } from '../types/user';
+import { IUserRaw } from '../types/user';
 
-export const collectionName = 'users';
-export const schema = new mongoose.Schema<IUser>(
+export const schemaName = 'users';
+export const schema = new mongoose.Schema<IUserRaw>(
 	{
 		name: {
 			type: mongoose.SchemaTypes.String,

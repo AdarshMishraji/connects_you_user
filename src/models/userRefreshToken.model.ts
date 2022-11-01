@@ -1,10 +1,10 @@
-import { mongoose } from '@adarsh-mishra/node-utils';
+import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
 
 import { userRefreshToken } from '../schemas';
-import { IUserRefreshToken } from '../types';
+import { IUserRefreshTokenRaw } from '../types';
 
-export const UserRefreshTokenModel = mongoose.model<IUserRefreshToken>(
-	userRefreshToken.collectionName,
+export const UserRefreshTokenModel = mongoose.model<IUserRefreshTokenRaw>(
+	userRefreshToken.schemaName,
 	userRefreshToken.schema,
-	userRefreshToken.collectionName,
+	userRefreshToken.schemaName,
 );

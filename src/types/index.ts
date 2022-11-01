@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import { TUser } from './user';
-
 export * from './user';
 export * from './userLoginHistory';
 export * from './userRefreshToken';
@@ -24,13 +22,8 @@ declare global {
 			PROD_REDIS_HOST: string;
 			PROD_REDIS_PORT: number;
 			PROD_REDIS_DB: number;
-			IP_INFO_TOKEN: string;
-		}
-	}
-
-	namespace Express {
-		interface Request {
-			user?: TUser;
+			PROD_REDIS_PASSWORD: string;
+			PROD_REDIS_USERNAME: string;
 		}
 	}
 }
