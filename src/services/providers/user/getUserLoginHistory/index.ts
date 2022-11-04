@@ -7,9 +7,9 @@ import { BadRequestError, NotFoundError } from '@adarsh-mishra/node-utils/httpRe
 import { MongoObjectId } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
-import { errorCallback } from '../../../helpers/errorCallback';
-import { UserLoginHistoryModel } from '../../../models';
-import { IUserLoginHistoryRaw } from '../../../types';
+import { errorCallback } from '../../../../helpers/errorCallback';
+import { UserLoginHistoryModel } from '../../../../models';
+import { IUserLoginHistoryRaw } from '../../../../types';
 
 const prepareResponseForLoginHistory = async (userLoginInfo: IUserLoginHistoryRaw): Promise<UserLoginInfo> => ({
 	userId: userLoginInfo!.userId.toString(),

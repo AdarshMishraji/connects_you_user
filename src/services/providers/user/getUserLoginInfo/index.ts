@@ -6,8 +6,8 @@ import { BadRequestError, NotFoundError } from '@adarsh-mishra/node-utils/httpRe
 import { MongoObjectId } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
-import { errorCallback } from '../../../helpers/errorCallback';
-import { UserLoginHistoryModel } from '../../../models';
+import { errorCallback } from '../../../../helpers/errorCallback';
+import { UserLoginHistoryModel } from '../../../../models';
 
 export const getUserLoginInfo = async (
 	req: ServerUnaryCall<UserLoginInfoRequest, UserLoginInfoResponse>,

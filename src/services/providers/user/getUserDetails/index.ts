@@ -6,9 +6,9 @@ import { BadRequestError, NotFoundError } from '@adarsh-mishra/node-utils/httpRe
 import { MongoObjectId } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
-import { errorCallback } from '../../../helpers/errorCallback';
-import { UserModel } from '../../../models';
-import { IUserBase } from '../../../types';
+import { errorCallback } from '../../../../helpers/errorCallback';
+import { UserModel } from '../../../../models';
+import { IUserBase } from '../../../../types';
 
 export const getUserDetails = async (
 	req: ServerUnaryCall<UserDetailsRequest, UserDetailsResponse>,

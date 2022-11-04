@@ -5,7 +5,7 @@ import { bulkAesDecrypt, isEmptyEntity } from '@adarsh-mishra/node-utils/commonH
 import { NotFoundError } from '@adarsh-mishra/node-utils/httpResponses';
 import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
 
-import { UserLoginHistoryModel, UserModel } from '../../../models';
+import { UserLoginHistoryModel, UserModel } from '../../../../models';
 
 export type TLoginParams = {
 	loginMetaData?: string;

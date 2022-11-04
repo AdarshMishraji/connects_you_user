@@ -7,9 +7,9 @@ import { NotFoundError } from '@adarsh-mishra/node-utils/httpResponses';
 import { MongoObjectId } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
-import { errorCallback } from '../../../helpers/errorCallback';
-import { UserModel } from '../../../models';
-import { IUserBase, IUserRaw } from '../../../types';
+import { errorCallback } from '../../../../helpers/errorCallback';
+import { UserModel } from '../../../../models';
+import { IUserBase, IUserRaw } from '../../../../types';
 
 const prepareResponseForUser = async (user: IUserRaw): Promise<UserDetails> => {
 	const bulkAesDecryptData = await bulkAesDecrypt<

@@ -5,8 +5,8 @@ import { bulkAesEncrypt } from '@adarsh-mishra/node-utils/commonHelpers';
 import { mongoose } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { TokenPayload } from 'google-auth-library';
 
-import { UserLoginHistoryModel, UserModel } from '../../../models';
-import { IUserBase } from '../../../types';
+import { UserLoginHistoryModel, UserModel } from '../../../../models';
+import { IUserBase } from '../../../../types';
 
 export type TSignupParams = {
 	oAuth2Response: TokenPayload;

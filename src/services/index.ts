@@ -4,15 +4,16 @@ import { ProtoGrpcType as UserProtoGrpcType } from '@adarsh-mishra/connects_you_
 import { Redis } from '@adarsh-mishra/node-utils/redisHelpers';
 import { Server, ServerCredentials } from '@grpc/grpc-js';
 
-import { authenticate } from '../handlers/auth/authenticate';
-import { refreshToken } from '../handlers/auth/refreshToken';
-import { signout } from '../handlers/auth/signout';
-import { updateFcmToken } from '../handlers/auth/updateFcmToken';
-import { getAllUsers } from '../handlers/user/getAllUsers';
-import { getUserDetails } from '../handlers/user/getUserDetails';
-import { getUserLoginHistory } from '../handlers/user/getUserLoginHistory';
-import { getUserLoginInfo } from '../handlers/user/getUserLoginInfo';
 import { handlerWrapper } from '../helpers/grpcHandlersWrapper';
+
+import { authenticate } from './providers/auth/authenticate';
+import { refreshToken } from './providers/auth/refreshToken';
+import { signout } from './providers/auth/signout';
+import { updateFcmToken } from './providers/auth/updateFcmToken';
+import { getAllUsers } from './providers/user/getAllUsers';
+import { getUserDetails } from './providers/user/getUserDetails';
+import { getUserLoginHistory } from './providers/user/getUserLoginHistory';
+import { getUserLoginInfo } from './providers/user/getUserLoginInfo';
 
 const port = `0.0.0.0:${process.env.PORT || 1000}`;
 

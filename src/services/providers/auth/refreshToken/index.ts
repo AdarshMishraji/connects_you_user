@@ -7,9 +7,9 @@ import { BadRequestError } from '@adarsh-mishra/node-utils/httpResponses';
 import { MongoObjectId } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
-import { errorCallback } from '../../../helpers/errorCallback';
-import { UserLoginHistoryModel } from '../../../models';
-import { UserRefreshTokenModel } from '../../../models/userRefreshToken.model';
+import { errorCallback } from '../../../../helpers/errorCallback';
+import { UserLoginHistoryModel } from '../../../../models';
+import { UserRefreshTokenModel } from '../../../../models/userRefreshToken.model';
 
 export const refreshToken = async (
 	req: ServerUnaryCall<RefreshTokenRequest, RefreshTokenResponse>,
