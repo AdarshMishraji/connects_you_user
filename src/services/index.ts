@@ -15,15 +15,13 @@ import { getUserDetails } from './providers/user/getUserDetails';
 import { getUserLoginHistory } from './providers/user/getUserLoginHistory';
 import { getUserLoginInfo } from './providers/user/getUserLoginInfo';
 
-const port = `0.0.0.0:${process.env.PORT || 1000}`;
-
 const ServiceProviders = {
 	auth: (getServiceProvider('auth') as unknown as AuthProtoGrpcType).auth,
 	user: (getServiceProvider('user') as unknown as UserProtoGrpcType).user,
 };
 
 export const createGRPCServer = ({ redisClient }: { redisClient: Redis }) => {
-	const server = new Server({ 'grpc.keepalive_permit_without_calls': 1 });
+	const server = new Server({ 'grpc.keepalive_permit_without_calls': 1, 'grpc.max_reconnect_backoff_ms': 10000 });
 
 	server.addService(ServiceProviders.auth.AuthServices.service, {
 		authenticate: handlerWrapper(authenticate, { redisClient }),
@@ -38,7 +36,7 @@ export const createGRPCServer = ({ redisClient }: { redisClient: Redis }) => {
 		getUserLoginHistory: handlerWrapper(getUserLoginHistory, { redisClient }),
 	});
 
-	server.bindAsync(port.toString(), ServerCredentials.createInsecure(), (error, port) => {
+	server.bindAsync(process.env.URL.toString(), ServerCredentials.createInsecure(), (error, port) => {
 		if (error) {
 			throw error;
 		}

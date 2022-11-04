@@ -7,7 +7,7 @@ export * from './userRefreshToken';
 declare global {
 	namespace NodeJS {
 		interface ProcessEnv {
-			PORT: number;
+			URL: string;
 			GOOGLE_CLIENT_ID: string;
 			SECRET: string;
 			ENCRYPT_KEY: string;
@@ -24,6 +24,8 @@ declare global {
 			PROD_REDIS_DB: number;
 			PROD_REDIS_PASSWORD: string;
 			PROD_REDIS_USERNAME: string;
+			ROOM_SERVICE_URL: string;
+			ROOM_SERVICE_API_KEY: string;
 		}
 	}
 }
