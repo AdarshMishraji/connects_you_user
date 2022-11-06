@@ -1,29 +1,21 @@
-import { UserLoginInfo } from '@adarsh-mishra/connects_you_services/services/auth/UserLoginInfo';
-import { ResponseStatusEnum } from '@adarsh-mishra/connects_you_services/services/user/ResponseStatusEnum';
-import { UserLoginHistoryRequest } from '@adarsh-mishra/connects_you_services/services/user/UserLoginHistoryRequest';
-import { UserLoginHistoryResponse } from '@adarsh-mishra/connects_you_services/services/user/UserLoginHistoryResponse';
-import { isEmptyEntity, promisifiedAesDecryptData } from '@adarsh-mishra/node-utils/commonHelpers';
+import {
+	GetUserLoginHistoryRequest,
+	GetUserLoginHistoryResponse,
+	ResponseStatusEnum,
+} from '@adarsh-mishra/connects_you_services/services/user';
+import { isEmptyEntity } from '@adarsh-mishra/node-utils/commonHelpers';
 import { BadRequestError, NotFoundError } from '@adarsh-mishra/node-utils/httpResponses';
 import { MongoObjectId } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
-import { errorCallback } from '../../../../helpers/errorCallback';
 import { UserLoginHistoryModel } from '../../../../models';
-import { IUserLoginHistoryRaw } from '../../../../types';
+import { errorCallback } from '../../../../utils';
 
-const prepareResponseForLoginHistory = async (userLoginInfo: IUserLoginHistoryRaw): Promise<UserLoginInfo> => ({
-	userId: userLoginInfo!.userId.toString(),
-	loginId: userLoginInfo!._id.toString(),
-	createdAt: userLoginInfo!.createdAt?.toISOString(),
-	isValid: userLoginInfo!.isValid,
-	loginMetaData: JSON.parse(
-		(await promisifiedAesDecryptData(userLoginInfo!.loginMetaData, process.env.ENCRYPT_KEY)) ?? '{}',
-	),
-});
+import { prepareResponseForLoginHistory } from './prepareResponseForLoginHistory';
 
 export const getUserLoginHistory = async (
-	req: ServerUnaryCall<UserLoginHistoryRequest, UserLoginHistoryResponse>,
-	callback: sendUnaryData<UserLoginHistoryResponse>,
+	req: ServerUnaryCall<GetUserLoginHistoryRequest, GetUserLoginHistoryResponse>,
+	callback: sendUnaryData<GetUserLoginHistoryResponse>,
 ) => {
 	try {
 		const { userId, nonValidAllowed, limit = 10, offset = 0 } = req.request;
@@ -31,17 +23,17 @@ export const getUserLoginHistory = async (
 			throw new BadRequestError({ error: 'Invalid request. Please provide loginId and userId' });
 		}
 
-		const userIdObjectId = MongoObjectId(userId);
+		const userObjectId = MongoObjectId(userId);
 		const [userLoginHistory, total] = await Promise.all([
 			UserLoginHistoryModel.find({
-				userId: userIdObjectId,
+				userId: userObjectId,
 				...(nonValidAllowed ? {} : { isValid: true }),
 			})
 				.limit(limit)
 				.skip(offset)
 				.lean()
 				.exec(),
-			UserLoginHistoryModel.count({ userId: userIdObjectId }).lean().exec(),
+			UserLoginHistoryModel.count({ userId: userObjectId }).lean().exec(),
 		]);
 
 		if (isEmptyEntity(userLoginHistory)) throw new NotFoundError({ error: 'user login History not found' });

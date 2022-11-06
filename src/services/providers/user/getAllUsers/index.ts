@@ -1,47 +1,30 @@
-import { AllUsersRequest } from '@adarsh-mishra/connects_you_services/services/user/AllUsersRequest';
-import { AllUsersResponse } from '@adarsh-mishra/connects_you_services/services/user/AllUsersResponse';
-import { ResponseStatusEnum } from '@adarsh-mishra/connects_you_services/services/user/ResponseStatusEnum';
-import { UserDetails } from '@adarsh-mishra/connects_you_services/services/user/UserDetails';
-import { bulkAesDecrypt, isEmptyEntity } from '@adarsh-mishra/node-utils/commonHelpers';
-import { NotFoundError } from '@adarsh-mishra/node-utils/httpResponses';
+import {
+	GetAllUsersRequest,
+	GetAllUsersResponse,
+	ResponseStatusEnum,
+} from '@adarsh-mishra/connects_you_services/services/user';
+import { isEmptyEntity } from '@adarsh-mishra/node-utils/commonHelpers';
+import { BadRequestError, NotFoundError } from '@adarsh-mishra/node-utils/httpResponses';
 import { MongoObjectId } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
-import { errorCallback } from '../../../../helpers/errorCallback';
 import { UserModel } from '../../../../models';
-import { IUserBase, IUserRaw } from '../../../../types';
+import { errorCallback } from '../../../../utils';
 
-const prepareResponseForUser = async (user: IUserRaw): Promise<UserDetails> => {
-	const bulkAesDecryptData = await bulkAesDecrypt<
-		Pick<IUserBase, 'name' | 'email' | 'photoUrl' | 'publicKey' | 'description'>
-	>(
-		{
-			email: user.email,
-			name: user.name,
-			photoUrl: user.photoUrl ?? '',
-			publicKey: user.publicKey,
-			description: user.description ?? '',
-		},
-		process.env.ENCRYPT_KEY,
-	);
-	return {
-		userId: user!._id.toString(),
-		createdAt: user!.createdAt?.toISOString(),
-		updatedAt: user!.updatedAt?.toISOString(),
-		...bulkAesDecryptData,
-	};
-};
+import { prepareResponseForUser } from './prepareResponseForUser';
 
 export const getAllUsers = async (
-	req: ServerUnaryCall<AllUsersRequest, AllUsersResponse>,
-	callback: sendUnaryData<AllUsersResponse>,
+	req: ServerUnaryCall<GetAllUsersRequest, GetAllUsersResponse>,
+	callback: sendUnaryData<GetAllUsersResponse>,
 ) => {
 	try {
 		const { exceptUserId } = req.request;
 
-		const exceptUserIdObj = MongoObjectId(exceptUserId);
+		const exceptUserObjectId = MongoObjectId(exceptUserId);
 
-		const filter = exceptUserIdObj ? { _id: { $ne: exceptUserIdObj } } : {};
+		if (exceptUserId && !exceptUserObjectId) throw new BadRequestError({ error: 'ExpectUserId is invalid.' });
+
+		const filter = exceptUserObjectId ? { _id: { $ne: exceptUserObjectId } } : {};
 
 		const usersResponse = await UserModel.find(filter, {
 			name: true,

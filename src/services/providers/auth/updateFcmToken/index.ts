@@ -5,28 +5,26 @@ import { BadRequestError, NotFoundError } from '@adarsh-mishra/node-utils/httpRe
 import { MongoObjectId } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
-import { errorCallback } from '../../../../helpers/errorCallback';
-import { validateAccess } from '../../../../middlewares';
 import { UserModel } from '../../../../models';
+import { errorCallback } from '../../../../utils';
 
 export const updateFcmToken = async (
 	req: ServerUnaryCall<UpdateFcmTokenRequest, UpdateFcmTokenResponse>,
 	callback: sendUnaryData<UpdateFcmTokenResponse>,
 ) => {
 	try {
-		validateAccess(req);
 		const { fcmToken, userId } = req.request;
 		if (!fcmToken || !userId) {
 			throw new BadRequestError({ error: 'Invalid request. Please provide fcmToken and userId' });
 		}
 
-		const userIdObj = MongoObjectId(userId);
+		const userObjectId = MongoObjectId(userId);
 
-		if (!userIdObj) {
+		if (!userObjectId) {
 			throw new BadRequestError({ error: 'Invalid request. Please provide valid userId' });
 		}
 
-		const updatedUser = await UserModel.updateOne({ _id: userIdObj }, { fcmToken }).exec();
+		const updatedUser = await UserModel.updateOne({ _id: userObjectId }, { fcmToken }).exec();
 
 		if (updatedUser.modifiedCount === 0) {
 			throw new NotFoundError({ error: 'userId not found' });

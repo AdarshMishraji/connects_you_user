@@ -7,9 +7,9 @@ import { BadRequestError } from '@adarsh-mishra/node-utils/httpResponses';
 import { MongoObjectId } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
-import { errorCallback } from '../../../../helpers/errorCallback';
 import { UserLoginHistoryModel } from '../../../../models';
 import { UserRefreshTokenModel } from '../../../../models/userRefreshToken.model';
+import { errorCallback } from '../../../../utils';
 
 export const refreshToken = async (
 	req: ServerUnaryCall<RefreshTokenRequest, RefreshTokenResponse>,
@@ -20,10 +20,10 @@ export const refreshToken = async (
 		if (!loginId || !userId)
 			throw new BadRequestError({ error: 'Invalid request. Please provide loginId and userId' });
 
-		const loginIdObj = MongoObjectId(loginId);
-		const userIdObj = MongoObjectId(userId);
+		const loginObjectId = MongoObjectId(loginId);
+		const userObjectId = MongoObjectId(userId);
 
-		if (!loginIdObj || !userIdObj) {
+		if (!loginObjectId || !userObjectId) {
 			throw new BadRequestError({ error: 'Invalid request. Please provide valid loginId and userId' });
 		}
 
@@ -32,7 +32,7 @@ export const refreshToken = async (
 			: undefined;
 
 		const userLoginData = await UserLoginHistoryModel.findOne({
-			_id: loginIdObj,
+			_id: loginObjectId,
 			isValid: true,
 		})
 			.lean()
@@ -51,7 +51,7 @@ export const refreshToken = async (
 		);
 
 		await new UserRefreshTokenModel({
-			loginId: loginIdObj,
+			loginId: loginObjectId,
 			loginMetaData,
 		}).save();
 

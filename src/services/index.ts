@@ -4,7 +4,7 @@ import { ProtoGrpcType as UserProtoGrpcType } from '@adarsh-mishra/connects_you_
 import { Redis } from '@adarsh-mishra/node-utils/redisHelpers';
 import { Server, ServerCredentials } from '@grpc/grpc-js';
 
-import { handlerWrapper } from '../helpers/grpcHandlersWrapper';
+import { handlerWrapper } from '../utils/grpcHandlersWrapper';
 
 import { authenticate } from './providers/auth/authenticate';
 import { refreshToken } from './providers/auth/refreshToken';

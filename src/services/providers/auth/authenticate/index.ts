@@ -1,15 +1,17 @@
-import { AuthenticateRequest } from '@adarsh-mishra/connects_you_services/services/auth/AuthenticateRequest';
-import { AuthenticateResponse } from '@adarsh-mishra/connects_you_services/services/auth/AuthenticateResponse';
-import { AuthTypeEnum } from '@adarsh-mishra/connects_you_services/services/auth/AuthTypeEnum';
-import { ResponseStatusEnum } from '@adarsh-mishra/connects_you_services/services/auth/ResponseStatusEnum';
-import { TokenTypesEnum } from '@adarsh-mishra/connects_you_services/services/auth/TokenTypesEnum';
+import {
+	AuthenticateRequest,
+	AuthenticateResponse,
+	AuthTypeEnum,
+	ResponseStatusEnum,
+	TokenTypesEnum,
+} from '@adarsh-mishra/connects_you_services/services/auth';
 import { aesEncryptData, hashData, isEmptyEntity, jwt } from '@adarsh-mishra/node-utils/commonHelpers';
 import { BadRequestError, NotFoundError } from '@adarsh-mishra/node-utils/httpResponses';
 import { createSessionTransaction } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
-import { errorCallback } from '../../../../helpers/errorCallback';
 import { fetchUserDetails } from '../../../../helpers/fetchUserDetails';
+import { errorCallback } from '../../../../utils';
 
 import { login } from './login';
 import { signup } from './signup';
@@ -45,7 +47,7 @@ export const authenticate = async (
 				const data = await login({
 					existedUserId: existedUser._id,
 					loginMetaData,
-					fcmToken: fcmToken!,
+					fcmToken: fcmToken,
 					session,
 				});
 				await session.commitTransaction();
@@ -53,9 +55,9 @@ export const authenticate = async (
 			} else {
 				const data = await signup({
 					oAuth2Response,
-					publicKey: publicKey!,
+					publicKey: publicKey,
 					userEmailHash,
-					fcmToken: fcmToken!,
+					fcmToken: fcmToken,
 					session,
 					loginMetaData,
 				});

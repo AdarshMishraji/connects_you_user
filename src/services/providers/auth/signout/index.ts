@@ -5,31 +5,29 @@ import { BadRequestError, NotFoundError } from '@adarsh-mishra/node-utils/httpRe
 import { MongoObjectId } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
-import { errorCallback } from '../../../../helpers/errorCallback';
-import { validateAccess } from '../../../../middlewares';
 import { UserLoginHistoryModel } from '../../../../models';
+import { errorCallback } from '../../../../utils';
 
 export const signout = async (
 	req: ServerUnaryCall<SignoutRequest, SignoutResponse>,
 	callback: sendUnaryData<SignoutResponse>,
 ) => {
 	try {
-		validateAccess(req);
 		const { userId, loginId } = req.request;
 		if (!userId || !loginId)
 			throw new BadRequestError({ error: 'Invalid request. Please provide loginId and userId' });
 
-		const loginIdObj = MongoObjectId(loginId);
-		const userIdObj = MongoObjectId(userId);
+		const loginObjectId = MongoObjectId(loginId);
+		const userObjectId = MongoObjectId(userId);
 
-		if (!loginIdObj || !userIdObj) {
+		if (!loginObjectId || !userObjectId) {
 			throw new BadRequestError({ error: 'Invalid request. Please provide valid loginId and userId' });
 		}
 
 		const updatedUserLoginHistory = await UserLoginHistoryModel.updateOne(
 			{
-				_id: loginIdObj,
-				userId: userIdObj,
+				_id: loginObjectId,
+				userId: userObjectId,
 				isValid: true,
 			},
 			{ isValid: false },

@@ -1,18 +1,20 @@
-import { ResponseStatusEnum } from '@adarsh-mishra/connects_you_services/services/user/ResponseStatusEnum';
-import { UserDetailsRequest } from '@adarsh-mishra/connects_you_services/services/user/UserDetailsRequest';
-import { UserDetailsResponse } from '@adarsh-mishra/connects_you_services/services/user/UserDetailsResponse';
+import {
+	GetUserDetailsRequest,
+	GetUserDetailsResponse,
+	ResponseStatusEnum,
+} from '@adarsh-mishra/connects_you_services/services/user';
 import { bulkAesDecrypt, isEmptyEntity } from '@adarsh-mishra/node-utils/commonHelpers';
 import { BadRequestError, NotFoundError } from '@adarsh-mishra/node-utils/httpResponses';
 import { MongoObjectId } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
-import { errorCallback } from '../../../../helpers/errorCallback';
 import { UserModel } from '../../../../models';
 import { IUserBase } from '../../../../types';
+import { errorCallback } from '../../../../utils';
 
 export const getUserDetails = async (
-	req: ServerUnaryCall<UserDetailsRequest, UserDetailsResponse>,
-	callback: sendUnaryData<UserDetailsResponse>,
+	req: ServerUnaryCall<GetUserDetailsRequest, GetUserDetailsResponse>,
+	callback: sendUnaryData<GetUserDetailsResponse>,
 ) => {
 	try {
 		const { userId } = req.request;
@@ -20,14 +22,14 @@ export const getUserDetails = async (
 			throw new BadRequestError({ error: 'Invalid request. Please provide loginId and userId' });
 		}
 
-		const userIdObj = MongoObjectId(userId);
+		const userObjectId = MongoObjectId(userId);
 
-		if (!userIdObj) {
+		if (!userObjectId) {
 			throw new BadRequestError({ error: 'Invalid request. Please provide valid userId' });
 		}
 
 		const userResponse = await UserModel.findOne(
-			{ _id: userIdObj },
+			{ _id: userObjectId },
 			{
 				email: true,
 				name: true,
