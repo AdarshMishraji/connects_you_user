@@ -10,8 +10,8 @@ import { BadRequestError, NotFoundError } from '@adarsh-mishra/node-utils/httpRe
 import { createSessionTransaction } from '@adarsh-mishra/node-utils/mongoHelpers';
 import { sendUnaryData, ServerUnaryCall } from '@grpc/grpc-js';
 
-import { fetchUserDetails } from '../../../../helpers/fetchUserDetails';
 import { errorCallback } from '../../../../utils';
+import { fetchUserDetails } from '../../_helper';
 
 import { login } from './login';
 import { signup } from './signup';

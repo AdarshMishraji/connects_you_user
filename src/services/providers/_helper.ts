@@ -1,4 +1,4 @@
-import { UserModel } from '../models';
+import { UserModel } from '../../models';
 
 type TQueryType = Partial<Record<'userId' | 'emailHash', unknown>>;
 
