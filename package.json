@@ -13,7 +13,8 @@
 		"testMultiDocumentTransactionInMongoDB": "tsc -p tsconfig.release.json && node ./build/src/scripts/testMultiDocumentTransactionInMongoDB.js",
 		"testScript": "tsc -p tsconfig.release.json && node ./build/src/scripts/test.js",
 		"lint": "eslint ./src --ext .ts,.js --fix",
-		"reinstall-nm": "rm -rf node_modules yarn.lock && yarn cache clean && touch yarn.lock && yarn"
+		"reinstall-nm": "rm -rf node_modules yarn.lock && yarn cache clean && touch yarn.lock && yarn",
+		"test": "jest --detectOpenHandles --forceExit --verbose  --runInBand --logHeapUsage --silent"
 	},
 	"author": "Adarsh Mishra",
 	"license": "ISC",
@@ -24,17 +25,25 @@
 		"google-auth-library": "^8.5.2"
 	},
 	"devDependencies": {
+		"@babel/core": "^7.20.2",
+		"@babel/preset-env": "^7.20.2",
+		"@babel/preset-typescript": "^7.18.6",
+		"@jest/globals": "^29.3.1",
+		"@types/jest": "^29.2.3",
 		"@types/node": "^18.7.19",
 		"@typescript-eslint/eslint-plugin": "^5.38.0",
 		"@typescript-eslint/parser": "^5.38.0",
+		"babel-jest": "^29.3.1",
 		"eslint": "^8.24.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-import": "^2.26.0",
 		"eslint-plugin-prettier": "^4.2.1",
 		"eslint-plugin-sonarjs": "^0.15.0",
 		"husky": "^8.0.1",
+		"jest": "^29.3.1",
 		"lint-staged": "^13.0.3",
 		"prettier": "^2.7.1",
+		"ts-jest": "^29.0.3",
 		"ts-node": "^10.9.1",
 		"typescript": "^4.8.3"
 	},
